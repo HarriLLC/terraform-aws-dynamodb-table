@@ -1,4 +1,8 @@
-# terraform-aws-dynamodb-table
+# CLAUDE.md
+
+`terraform-aws-dynamodb-table` — a reusable Harri Terraform **module**. No Harri
+stack pins it today, so it is consumed by git source until it is published to the
+HCP private registry.
 
 Harri's fork of `terraform-aws-modules/dynamodb-table`. No Harri stack pins it
 today — `TerraformDynamoDB` calls the upstream public module directly — so its
