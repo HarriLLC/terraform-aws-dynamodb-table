@@ -25,7 +25,7 @@ consumer exists.
 
 ```hcl
 module "dynamodb_table" {
-  source = "git::ssh://git@github.com/HarriLLC/terraform-aws-dynamodb-table.git?ref=v5.5.0"
+  source = "git::ssh://git@github.com/HarriLLC/terraform-aws-dynamodb-table.git?ref=vX.Y.Z"
 
   # no required inputs — set at least these in practice
   name     = "prep_my_service_table"
@@ -34,15 +34,16 @@ module "dynamodb_table" {
 }
 ```
 
+> Take the current published version from the HCP private registry, or from the
+> `version` pinned beside this `source` in a consumer's `common/resources.tf`.
+> Consumers pin an exact version; ranges are never allowed.
+
 ## Required Versions
 
-| Component | Constraint |
-|---|---|
-| Terraform | `>= 1.0` |
-| AWS provider | `>= 4.23` |
-
-Source of truth: `versions.tf`. The provider constraint is intentionally a
-range so each consumer can pin an exact version.
+Read them from **`versions.tf`**: `required_version` for Terraform core, and each
+`required_providers` entry for the providers. They are not repeated here, so this
+guide cannot go stale when they change. A module's provider constraint is
+intentionally a range, so consumers can pin an exact version themselves.
 
 ## File Layout
 
@@ -105,14 +106,6 @@ terraform-aws-dynamodb-table/
 - `examples/autoscaling` — a PROVISIONED table with read/write and index autoscaling.
 - `examples/global-tables` — replicas in additional regions.
 
-## Validate Changes Locally
-
-- Run `terraform fmt` before opening a PR (always — CI may fail otherwise).
-- From the module dir: `terraform init -upgrade=false`.
-- Run `terraform validate`.
-- **Do not run `terraform plan` or `terraform apply` locally** — modules
-  don't hold state on their own; that happens in the consumer stack.
-
 ## Publishing a New Version
 
 1. Make the changes; run `terraform fmt` + `terraform validate` (and
@@ -123,13 +116,13 @@ terraform-aws-dynamodb-table/
 3. Update `README.md` (and `CHANGELOG.md` if the module keeps one).
 4. Tag and push **that one tag**: `git tag vX.Y.Z && git push origin vX.Y.Z`.
 5. HCP Registry auto-publishes from the tag; bump consumers' `version` pins to
-   the exact, `v`-stripped value (`3.1.0`, not `v3.1.0`).
+   the exact, `v`-stripped value (`X.Y.Z`, not `vX.Y.Z`).
 
 ## Conventions & Naming
 
-House style and module conventions load automatically from the
-`harri-tf-house-style` and `harri-tf-modules` rules whenever a `.tf` file in this
-module is edited — they are not repeated here.
+House style, module conventions, the local validate flow and the publish rules
+all load automatically from the `harri-tf-house-style` and `harri-tf-modules`
+rules whenever a `.tf` file in this module is edited — they are not repeated here.
 
 ### Project naming patterns
 
